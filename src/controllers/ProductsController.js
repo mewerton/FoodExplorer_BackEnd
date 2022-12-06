@@ -44,6 +44,24 @@ class ProductsController{
 
         return response.json()
     }
+
+    async index(request, response){
+        const { title, ingredients } = request.query
+
+        let products
+
+        if(ingredients){
+            const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim())
+
+            products = await knex("ingredients")
+            .whereIn("name", filterIngredients)
+
+        }else{
+            products = await knex("products").whereLike("title", `%${title}%`)
+        }
+
+        return response.json(products)
+    }
 }
 
 module.exports = ProductsController
