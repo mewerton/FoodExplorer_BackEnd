@@ -54,13 +54,30 @@ class ProductsController{
             const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim())
 
             products = await knex("ingredients")
+            .select([
+                "products.id",
+                "products.title"
+            ])
+            .whereLike("products.title",`%${title}%`)
             .whereIn("name", filterIngredients)
+            .innerJoin("products", "products.id", "ingredients.product_id")
+            .orderBy("products.title")
 
         }else{
             products = await knex("products").whereLike("title", `%${title}%`)
         }
 
-        return response.json(products)
+        const userIngredients = await knex("ingredients")
+        const productsWithIngredients = products.map(product => {
+            const productIngredients = userIngredients.filter( ingredient => ingredient.product_id === product.id)
+
+            return {
+                ...product,
+                ingredients: productIngredients
+            }
+        })
+
+        return response.json(productsWithIngredients)
     }
 }
 
