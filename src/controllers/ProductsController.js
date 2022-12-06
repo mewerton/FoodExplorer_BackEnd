@@ -25,6 +25,25 @@ class ProductsController{
         response.json()
     }
 
+    async show(request,response){
+        const { id } = request.params
+
+        const product = await knex("products").where({ id }).first()
+        const ingredients = await knex("ingredients").where({ product_id: id}).orderBy("name")
+        
+        return response.json({
+            ...product,
+            ingredients
+        })
+    }
+
+    async delete(request, response){
+        const { id } = request.params
+
+        await knex("products").where({ id }).delete()
+
+        return response.json()
+    }
 }
 
 module.exports = ProductsController

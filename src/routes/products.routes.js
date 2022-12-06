@@ -7,6 +7,8 @@ const productsRoutes = Router()
 const productsController = new ProductsController()
 
 productsRoutes.post("/:user_id", productsController.create)
+productsRoutes.get("/:id", productsController.show)
+productsRoutes.delete("/:id", productsController.delete)
 
 
 module.exports = productsRoutes
