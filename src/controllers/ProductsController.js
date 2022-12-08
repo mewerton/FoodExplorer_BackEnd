@@ -82,3 +82,5 @@ class ProductsController{
 }
 
 module.exports = ProductsController
+
+// Não foi feito o UPDATE em ProductsController, é necessário fazer

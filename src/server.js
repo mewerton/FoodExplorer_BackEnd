@@ -14,6 +14,7 @@ migrationsRun()
 const app = express()
 app.use(express.json())
 
+//verificar depois se essa forma de buscar imagem do produto está correta
 app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER))
 
 app.use(routes)
