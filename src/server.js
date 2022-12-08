@@ -5,6 +5,8 @@ const AppError = require("./utils/AppError")
 
 const uploadConfig = require("./configs/upload")
 
+const cors = require("cors")
+
 const express = require("express")
 
 const routes = require('./routes')
@@ -12,6 +14,7 @@ const routes = require('./routes')
 migrationsRun()
 
 const app = express()
+app.use(cors())
 app.use(express.json())
 
 //verificar depois se essa forma de buscar imagem do produto está correta
