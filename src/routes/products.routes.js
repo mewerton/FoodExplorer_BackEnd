@@ -3,23 +3,20 @@ const multer = require("multer")
 const uploadConfig = require("../configs/upload")
 
 const ProductsController = require('../controllers/ProductsController')
+const ProductAvatarController = require('../controllers/ProductAvatarController')
 const ensureAuthenticated = require("../middlewares/ensureAuthenticated")
 
 const productsRoutes = Router()
 const upload = multer(uploadConfig.MULTER)
 
 const productsController = new ProductsController()
-
-//productsRoutes.use(ensureAuthenticated)
+const productAvatarController = new ProductAvatarController()
 
 productsRoutes.get("/", productsController.index)
 productsRoutes.post("/", ensureAuthenticated, productsController.create)
 productsRoutes.get("/:id", productsController.show)
 productsRoutes.delete("/:id", ensureAuthenticated, productsController.delete)
-productsRoutes.patch("/avatar", ensureAuthenticated, upload.single("avatar"),(request, response) => {
-    console.log(request.file.filename)
-    response.json()
-})
+productsRoutes.patch("/:id", ensureAuthenticated, upload.single("avatar"), productAvatarController.update)
 
 
 module.exports = productsRoutes
