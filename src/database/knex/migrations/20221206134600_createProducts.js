@@ -3,6 +3,7 @@ exports.up = knex => knex.schema.createTable("products", table => {
     table.text("title")
     table.text("description")
     table.integer("value")
+    table.text("category")
     table.varchar("avatar")
     table.integer("user_id").references("id").inTable("users")
 
