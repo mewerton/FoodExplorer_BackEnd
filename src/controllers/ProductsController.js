@@ -48,7 +48,7 @@ class ProductsController{
 
     async index(request, response){
         const { title, ingredients } = request.query
-
+        
         let products
 
         if(ingredients){
