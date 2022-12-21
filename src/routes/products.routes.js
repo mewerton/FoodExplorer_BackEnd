@@ -13,7 +13,7 @@ const productsController = new ProductsController()
 const productAvatarController = new ProductAvatarController()
 
 productsRoutes.get("/", productsController.index)
-productsRoutes.post("/", ensureAuthenticated, productsController.create)
+productsRoutes.post("/", ensureAuthenticated, upload.single("avatar"), productsController.create)
 productsRoutes.get("/:id", productsController.show)
 productsRoutes.delete("/:id", ensureAuthenticated, productsController.delete)
 productsRoutes.patch("/:id", ensureAuthenticated, upload.single("avatar"), productAvatarController.update)

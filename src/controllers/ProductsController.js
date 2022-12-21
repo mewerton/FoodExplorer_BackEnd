@@ -1,11 +1,20 @@
 const knex = require("../database/knex")
+const DiskStorage = require("../providers/DiskStorage")
+const ProductAvatarController = require("./ProductAvatarController")
 
 class ProductsController{
     async create(request, response){
-        const {title, description, ingredients, value, category} = request.body
+        
+       const {title, description, ingredients, value, category} = request.body
+        
         const user_id = request.user.id
 
+        const diskStorage = new DiskStorage()
+
+        const avatar = await diskStorage.saveFile(request.file.filename)
+
         const product_id =  await knex("products").insert({
+            avatar,
             title,
             description,
             value,
@@ -23,7 +32,9 @@ class ProductsController{
 
         await knex("ingredients").insert(ingredientsInsert)
 
+       
         return response.json()
+        
     }
 
     async show(request,response){
