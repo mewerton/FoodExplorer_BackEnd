@@ -12,6 +12,13 @@ class ProductsController{
         const diskStorage = new DiskStorage()
 
         const avatar = await diskStorage.saveFile(request.file.filename)
+        
+        console.log(avatar,
+            title,
+            description,
+            value,
+            category,
+            user_id)
 
         const product_id =  await knex("products").insert({
             avatar,
@@ -21,17 +28,45 @@ class ProductsController{
             category,
             user_id
         })
+        console.log(product_id)
+        console.log(ingredients)
 
-        const ingredientsInsert = ingredients.map(name => {
-            return{
-                product_id,
-                name,
-                user_id
-            }
+        
+    const hasOnlyOneIngredient = typeof(ingredients) === "string";
+
+    let ingredientsInsert
+    if (hasOnlyOneIngredient) {
+      ingredientsInsert = {
+        name: ingredients,
+        product_id,
+        user_id
+      }
+
+    } else if (ingredients.length > 1) {
+      ingredientsInsert = ingredients.map(ingredient => 
+        ({
+          name : ingredient,
+          product_id,
+          user_id
         })
+      );
 
+    } else {
+      return 
+    }
+    //console.log(Object.entries(ingredients))
+
+        // const ingredientsInsert = ingredients.map(name => {
+        //     return{
+        //         product_id,
+        //         name,
+        //         user_id
+        //     }
+        // })
+        // console.log(ingredientsInsert)
+        // console.log("teste32")
         await knex("ingredients").insert(ingredientsInsert)
-
+        // console.log("teste34")
        
         return response.json()
         
