@@ -5,7 +5,7 @@ const ProductAvatarController = require("./ProductAvatarController")
 class ProductsController{
     async create(request, response){
         
-       const {title, description, ingredients, value, category} = request.body
+        const {title, description, ingredients, value, category} = request.body
         
         const user_id = request.user.id
 
@@ -13,13 +13,6 @@ class ProductsController{
 
         const avatar = await diskStorage.saveFile(request.file.filename)
         
-        console.log(avatar,
-            title,
-            description,
-            value,
-            category,
-            user_id)
-
         const product_id =  await knex("products").insert({
             avatar,
             title,
@@ -28,14 +21,12 @@ class ProductsController{
             category,
             user_id
         })
-        console.log(product_id)
-        console.log(ingredients)
-
-        
-    const hasOnlyOneIngredient = typeof(ingredients) === "string";
+ 
+    const OneIngredient = typeof(ingredients) === "string";
 
     let ingredientsInsert
-    if (hasOnlyOneIngredient) {
+    
+    if (OneIngredient) {
       ingredientsInsert = {
         name: ingredients,
         product_id,
@@ -54,20 +45,8 @@ class ProductsController{
     } else {
       return 
     }
-    //console.log(Object.entries(ingredients))
-
-        // const ingredientsInsert = ingredients.map(name => {
-        //     return{
-        //         product_id,
-        //         name,
-        //         user_id
-        //     }
-        // })
-        // console.log(ingredientsInsert)
-        // console.log("teste32")
         await knex("ingredients").insert(ingredientsInsert)
-        // console.log("teste34")
-       
+
         return response.json()
         
     }
