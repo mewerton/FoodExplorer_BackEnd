@@ -83,6 +83,7 @@ class ProductsController{
             .select([
                 "products.id",
                 "products.title"
+                
             ])
             .whereLike("products.title",`%${title}%`)
             .whereIn("name", filterIngredients)
@@ -91,18 +92,20 @@ class ProductsController{
 
         }else{
             products = await knex("products").whereLike("title", `%${title}%`)
+            .orWhereLike("description", `%${title}%`)
         }
-
+        
         const userIngredients = await knex("ingredients")
         const productsWithIngredients = products.map(product => {
             const productIngredients = userIngredients.filter( ingredient => ingredient.product_id === product.id)
+           
 
             return {
                 ...product,
                 ingredients: productIngredients
             }
         })
-
+       
         return response.json(productsWithIngredients)
     }
 }
